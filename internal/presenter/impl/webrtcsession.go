@@ -268,7 +268,9 @@ func (s *WebRTCSessionImpl) attachMatchedMediaTracksToPeer(peer *webrtc.PeerConn
 
 	payloadType, _ := strconv.ParseInt(matched[1], 10, 8)
 	videoTrack := s.getOrNewVideoTrackByPayloadType(int(payloadType))
-	_, err := peer.AddTrack(videoTrack)
+	_, err := peer.AddTransceiverFromTrack(videoTrack, webrtc.RtpTransceiverInit{
+		Direction: webrtc.RTPTransceiverDirectionSendonly,
+	})
 	if err != nil {
 		return err
 	}
@@ -281,7 +283,9 @@ func (s *WebRTCSessionImpl) attachMatchedMediaTracksToPeer(peer *webrtc.PeerConn
 
 	payloadType, _ = strconv.ParseInt(matched[1], 10, 8)
 	audioTrack := s.getOrNewAudioTrackByPayloadType(int(payloadType))
-	_, err = peer.AddTrack(audioTrack)
+	_, err = peer.AddTransceiverFromTrack(audioTrack, webrtc.RtpTransceiverInit{
+		Direction: webrtc.RTPTransceiverDirectionSendonly,
+	})
 	if err != nil {
 		return err
 	}
